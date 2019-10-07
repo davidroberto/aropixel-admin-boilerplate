@@ -1,0 +1,3 @@
+#aropixel_page:
+    #resource: '@AropixelPageBundle/Resources/config/routing.yml'
+    #prefix:   /admin

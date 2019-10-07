@@ -1,0 +1,12 @@
+aropixel_admin:
+    client:
+        name: Tesson
+    copyright:
+        name: David Robert & Cécile Salon
+        link: http://david-robert.fr
+    theme:
+        menu_position: left
+
+    filter_sets:
+
+    editor_filter_sets:

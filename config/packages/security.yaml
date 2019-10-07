@@ -1,0 +1,64 @@
+security:
+    encoders:
+        Aropixel\AdminBundle\Entity\User:
+            algorithm: argon2i
+            cost: 12
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        admin_user_provider:
+            entity:
+                class: Aropixel\AdminBundle\Entity\User
+                property: email
+
+    role_hierarchy:
+        ROLE_USER:        [ROLE_USER]
+        ROLE_ADMIN:       [ROLE_ADMIN]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_HYPER_ADMIN: [ROLE_SUPER_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        backoffice:
+            context: primary_auth
+            pattern:            ^/admin
+            form_login:
+                provider:       admin_user_provider
+                login_path:     aropixel_admin_security_login
+                use_forward:    true
+                use_referer:    true
+                check_path:     aropixel_admin_security_check
+                failure_path:   aropixel_admin_security_login
+                default_target_path: _admin
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 2592000 # 1 month in seconds
+                path:     /admin
+            logout:
+                path: aropixel_admin_security_logout
+                target: aropixel_admin_security_login
+            anonymous:    true
+            guard:
+                authenticators:
+                    - Aropixel\AdminBundle\Security\LoginFormAuthenticator
+
+        main:
+            anonymous: true
+
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }

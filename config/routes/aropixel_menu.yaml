@@ -1,0 +1,3 @@
+aropixel_menu:
+    resource: '@AropixelMenuBundle/Resources/config/routing.xml'
+    prefix:   /admin

@@ -1,0 +1,12 @@
+aropixel_menu:
+
+    menus:
+        navbar:
+            name: Menu principal
+            depth: 2
+        footer:
+            name: Footer
+            depth: 2
+
+    static_pages:
+        HOMEPAGE : "Page d'accueil"

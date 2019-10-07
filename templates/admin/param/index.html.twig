@@ -1,0 +1,73 @@
+{% extends '@AropixelAdmin/List/datatable.html.twig' %}
+
+
+{% block header_title %} <span class="text-semibold">Tesson</span> - Paramétrage {% endblock %}
+{% block header_breadcrumb %}
+    <ul class="breadcrumb breadcrumb-caret position-right">
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
+        <li class="active breadcrumb-item">Paramétrage</li>
+    </ul>
+{% endblock %}
+
+
+{% block header_elements %}
+
+    {% if is_granted('ROLE_HYPER_ADMIN') %}
+        {% set baseroute = get_baseroute() %}
+        <a href="{{ path(baseroute ~ '_new') }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Nouveau">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-plus fa-stack-1x fa-inverse"></i>
+        </a>
+        {% if route_exists(baseroute ~ '_order') %}
+            <a href="{{ path(baseroute ~ '_order') }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Réorganiser">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fas fa-arrows-alt fa-stack-1x fa-inverse"></i>
+            </a>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+
+
+{% block paneltitle %}Paramètres{% endblock %}
+
+
+{% block paneldatatable %}
+
+    <table class="table datatable">
+        <thead>
+        <tr>
+            {% if is_granted('ROLE_HYPER_ADMIN') %}<th>Paramètre</th>{% endif %}
+            <th>Paramètre</th>
+            <th>Valeur</th>
+            <th style="width:200px">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for param in params %}
+            <tr>
+                {% if is_granted('ROLE_HYPER_ADMIN') %}<td>{{ param.id }}</td>{% endif %}
+                <td>{{ param.label }}</td>
+                <td>{{ param.value }}</td>
+                <td>
+                    <div class="btn-group">
+                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                            <a href="{{ path('param_edit', {'id': param.id}) }}" class="btn btn-primary btn-labeled"><b><i class="fas fa-edit"></i></b> Modifier</a>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li class="dropdown-item"><a href="{{ path('param_edit', {'id': param.id}) }}"><i class="fas fa-edit"></i> Modifier</a></li>
+                                <li class="dropdown-item"><a class="delete" data-confirm="Supprimer le paramètre|Êtes-vous certain de vouloir supprimer ce paramètre ?"><i class="fas fa-trash"></i> Supprimer</a></li>
+                            </ul>
+                            {{ form(delete_forms[param.id]) }}
+                        {% else %}
+                            <a href="{{ path('param_edit', {'id': param.id}) }}" class="btn btn-xs bg-teal-400 btn-labeled"><b><i class="icon-pencil5"></i></b> Modifier</a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

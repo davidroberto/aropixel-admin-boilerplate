@@ -1,0 +1,50 @@
+{% extends '@AropixelAdmin/List/datatable.html.twig' %}
+
+
+{% block header_title %} <span class="text-semibold">Actualités</span> - Liste des actualités {% endblock %}
+{% block header_breadcrumb %}
+    <ul class="breadcrumb breadcrumb-caret position-right">
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
+        <li class="breadcrumb-item">Blog</li>
+        <li class="breadcrumb-item active">Actualités</li>
+    </ul>
+{% endblock %}
+
+
+{% block paneltitle %}Liste des actualités{% endblock %}
+
+
+{% block paneldatatable %}
+
+    <table class="table datatable">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th style="width:200px">Date</th>
+            <th style="width:200px">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+            <tr>
+                <td>{{ post.title }}</td>
+                <td>{{ post.createdAt|datetime('dd/MM/Y') }}</td>
+                <td>
+                    <div class="btn-group">
+                        <a href="{{ path('post_edit', {'id': post.id}) }}" class="btn btn-xs {{ post.status == 'online' ? 'bg-teal-400' : 'bg-grey-300' }} btn-labeled"><b><i class="icon-pencil5"></i></b> Modifier</a>
+                        <button type="button" class="btn btn-xs {{ post.status == 'online' ? 'bg-teal-400' : 'bg-grey-300' }} dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="{{ path('post_edit', {'id': post.id}) }}"><i class="icon-menu7"></i> Modifier</a></li>
+                            <li><a class="status" data-confirm="Êtes-vous certain de vouloir mettre ce post %s ?" data-path="{{ path('post_status', {'id': post.id}) }}"><i class="icon-eye"></i>{{ post.status == 'online' ? 'Mettre hors ligne' : 'Mettre en ligne' }}</a></li>
+                            <li class="divider"></li>
+                            <li><a class="delete" data-confirm="Êtes-vous certain de vouloir supprimer ce post ?"><i class="icon-gear"></i> Supprimer</a></li>
+                        </ul>
+                        {{ form(delete_forms[post.id]) }}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

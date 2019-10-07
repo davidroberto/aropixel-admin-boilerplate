@@ -1,0 +1,3 @@
+aropixel_contact:
+    resource: "@AropixelContactBundle/Resources/config/routing.xml"
+    prefix:   /admin

@@ -1,0 +1,74 @@
+{% extends '@AropixelAdmin/Form/base.html.twig' %}
+
+{% block header_title %} <span class="text-semibold">Tesson</span> - {% if param and param.id %}Modifier{% else %}Ajouter{% endif %} un paramètre {% endblock %}
+{% block header_breadcrumb %}
+    <ul class="breadcrumb breadcrumb-caret position-right">
+        <li class="breadcrumb-item"><a href="{{ url('_admin') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('param_index') }}">Paramétrage</a></li>
+        {% if param and param.id %}
+            <li class="breadcrumb-item">Modifier</li>
+            <li class="breadcrumb-item active">{{ param.label }}</li>
+        {% else %}
+            <li class="breadcrumb-item active">Création</li>
+        {% endif %}
+    </ul>
+{% endblock %}
+
+
+
+{% block header_elements %}
+
+    {% if is_granted('ROLE_HYPER_ADMIN') %}
+        {% set baseroute = get_baseroute() %}
+        <a href="{{ path(baseroute ~ '_index') }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Liste">
+            <i class="fas fa-circle fa-stack-2x"></i>
+            <i class="fas fa-list fa-stack-1x fa-inverse"></i>
+        </a>
+        {% if app.request.get('_route') != baseroute ~ '_new' %}
+            <a href="{{ path(baseroute ~ '_new') }}" class="fa-stack" data-toggle="tooltip" data-placement="bottom" title="Nouveau">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fas fa-plus fa-stack-1x fa-inverse"></i>
+            </a>
+        {% endif %}
+        {% if delete_form is defined and delete_form %}
+            {{ form_start(delete_form, {'attr': {'class': 'd-inline-block'}}) }}
+            <button type="button" id="delete_button" class="fa-stack danger" data-toggle="tooltip" data-placement="bottom" title="Supprimer">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fas fa-trash fa-stack-1x fa-inverse"></i>
+            </button>
+            {{ form_widget(delete_form._token) }}
+            {{ form_end(delete_form) }}
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+
+
+{% block mainPanel %}
+
+
+    <!-- Form horizontal -->
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h5 class="panel-title">{{ param.id ? param.label : 'Paramètre' }}</h5>
+        </div>
+
+        <div class="panel-body">
+
+            {% if is_granted('ROLE_HYPER_ADMIN') %}
+
+                {{ form_row(form.id) }}
+
+                {{ form_row(form.label) }}
+
+            {% endif %}
+
+            {{ form_row(form.value) }}
+
+        </div>
+
+    </div>
+
+{% endblock %}
